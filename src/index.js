@@ -26,15 +26,24 @@ const megamanOptions = {
     }
 };
 
+const objOptions = {
+    position: [200, 100],
+    speed: [300, -500],
+};
+
 const init = () => {
     const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
         fullMode: true,
         pattern: "./img/fill.jpg",
+        resistance: 30,
+        gravity: [0, 100],
+        border: true,
     });
 
     rxCanvas.clear();
     rxCanvas.createObjects(heroOptions);
     rxCanvas.createObjects(megamanOptions);
+    rxCanvas.createObjects(objOptions);
     rxCanvas.start();
 
 }

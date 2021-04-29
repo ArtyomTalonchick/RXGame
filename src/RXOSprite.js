@@ -1,7 +1,8 @@
 import RXResources from "./helpers/RXResources";
 
 const getOptions = (options) => ({
-    imageUrl: "default",    // путь к изображению
+    imageUrl: null,         // путь к изображению
+    fill: "rgb(0, 0, 0)",   // цвет прямоугольник, если не задано изображение
     position: [0, 0],       // x и y координаты изображения на спрайт карте
     size: [16, 16],         // размеры (только одного кадры)
     speed: 0,               // скорость анимации в фрейм/с
@@ -41,13 +42,22 @@ export default class RXSprite {
             sx += frame * this.options.size[0];
         }
     
-        this.rxCanvas.context.drawImage(
-            RXResources.get(this.options.imageUrl),
-            sx, sy,
-            ...this.options.size,
-            drowPosition[0] - this.options.size[0] / 2,
-            drowPosition[1] - this.options.size[1] / 2,
-            ...this.options.size
-        );
+        if (this.options.imageUrl && RXResources.get(this.options.imageUrl)) {
+            this.rxCanvas.context.drawImage(
+                RXResources.get(this.options.imageUrl),
+                sx, sy,
+                ...this.options.size,
+                drowPosition[0] - this.options.size[0] / 2,
+                drowPosition[1] - this.options.size[1] / 2,
+                ...this.options.size
+            );
+        } else {
+            this.rxCanvas.context.fillStyle = this.options.fill;
+            this.rxCanvas.context.fillRect(
+                drowPosition[0] - this.options.size[0] / 2,
+                drowPosition[1] - this.options.size[1] / 2,
+                ...this.options.size
+            );
+        }
     }
 }

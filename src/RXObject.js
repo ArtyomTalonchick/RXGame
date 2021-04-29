@@ -1,7 +1,6 @@
 import RXSprite from "./RXOSprite";
 
 const getOptions = (options) => ({
-    fillStyle: "rgb(0, 0, 0)",
     fullMode: true,
     position: [0, 0],
     speed: [0, 0],
@@ -14,13 +13,11 @@ export default class RXObject {
     constructor(rxCanvas, options) {
         this.rxCanvas = rxCanvas;
         this.options = getOptions(options);
-        if (this.options.spriteOptions) {
-            this.setSprite(this.options.spriteOptions);
-            delete this.options.spriteOptions;
-        }
+        this.setSprite(this.options.spriteOptions);
+        delete this.options.spriteOptions;
     }
 
-    setSprite = spriteOptions => {
+    setSprite = (spriteOptions = {}) => {
         this.sprite = new RXSprite(this.rxCanvas, spriteOptions);
     }
 
@@ -48,12 +45,25 @@ export default class RXObject {
             this.options.speed[0] -= Math.sign(this.options.speed[0]) * this.rxCanvas.options.resistance * dt;
             this.options.speed[1] -= Math.sign(this.options.speed[1]) * this.rxCanvas.options.resistance * dt;
         }
+        this.checkBorder();
         this.options.position[0] += this.options.speed[0] * dt;
         this.options.position[1] += this.options.speed[1] * dt;
+    }
 
-        if (this.getRightBottom()[1] > this.rxCanvas.canvas.height) {
-            this.options.speed[1] = - Math.abs(this.options.speed[1]);
+    checkBorder = () => {
+        if (!this.rxCanvas.options.border) return;
+        const [x1, y1] = this.getLeftTop();
+        const [x2, y2] = this.getRightBottom();
+        if (x1 < 0) {
+            this.options.speed[0] = + Math.abs(this.options.speed[0]);
+        } else if (x2 > this.rxCanvas.canvas.width) {
+            this.options.speed[0] = - Math.abs(this.options.speed[0]);
         }
+        if (y1 < 0) {
+            this.options.speed[1] = + Math.abs(this.options.speed[1]);
+        } else if (y2 > this.rxCanvas.canvas.height) {
+            this.options.speed[1] = - Math.abs(this.options.speed[1]);
+        }        
     }
 
     render = () => {

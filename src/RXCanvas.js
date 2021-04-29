@@ -4,10 +4,11 @@ import RXObject from "./RXObject";
 const getOptions = (context, options) => ({
     fullMode: true,
     fillStyle: options.pattern ? context.createPattern(RXResources.get(options.pattern), "repeat") : "rgb(255, 255, 255)",
-    gravity: [0, 100],
-    resistance: 10,
+    borders: true,
+    gravity: [0, 0],
+    resistance: 0,
     updateInterval: 10,
-
+    ...options,
 });
 
 export default class RXCanvas {

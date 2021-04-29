@@ -26,24 +26,42 @@ const megamanOptions = {
     }
 };
 
-const objOptions = {
-    position: [200, 100],
-    speed: [300, -500],
-};
+const getColor = () =>
+    `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
+
 
 const init = () => {
     const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
         fullMode: true,
         pattern: "./img/fill.jpg",
-        resistance: 30,
-        gravity: [0, 100],
+        // resistance: 30,
+        // gravity: [0, 100],
         border: true,
     });
 
-    rxCanvas.clear();
-    rxCanvas.createObjects(heroOptions);
-    rxCanvas.createObjects(megamanOptions);
-    rxCanvas.createObjects(objOptions);
+    // rxCanvas.createObjects(heroOptions);
+    // rxCanvas.createObjects(megamanOptions);
+
+    [...Array(100)].forEach((_, i) => {
+        rxCanvas.createObjects({
+            position: [Math.random() * 1000, Math.random() * 1000],
+            speed: [Math.random() * 500, Math.random() * 500 ],
+            spriteOptions: {
+                fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
+            },
+        });
+    })
+
+    rxCanvas.createObjects({position: [1000, 100], speed: [0, 800], spriteOptions: {fill: getColor()}});
+    rxCanvas.createObjects({position: [1000, 400], speed: [0, -400], spriteOptions: {fill: getColor()}});
+    
+    // rxCanvas.createObjects({position: [500, 440], speed: [100, 0], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [800, 440], speed: [-100, 0], spriteOptions: {fill: getColor()}});
+
+    // rxCanvas.createObjects({position: [500, 100], speed: [100, 100], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [800, 400], speed: [-100, -100], spriteOptions: {fill: getColor()}});
+
+
     rxCanvas.start();
 
 }

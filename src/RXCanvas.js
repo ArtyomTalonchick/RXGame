@@ -1,5 +1,7 @@
 import RXResources from "./helpers/RXResources";
 import RXObject from "./RXObject";
+import RXObjectHelper from "./helpers/RXObjectHelper";
+// import { hitObjects } from "./helpers/RXObjectHelper";
 
 const getOptions = (context, options) => ({
     fullMode: true,
@@ -57,14 +59,23 @@ export default class RXCanvas {
         requestAnimationFrame(this.renderLoop);
     }
 
-    createObjects = (options) => {
+    createObjects = options => {
         const object = new RXObject(this, options);
         this.objects.push(object);
         return object;
     }
 
-    update = (dt) => {
+    update = dt => {
         this.objects.forEach(object => object.update(dt));
+        this.checkCollision();
+    }
+
+    checkCollision = () => {
+        for (let i = 0; i < this.objects.length; i++) {
+            for (let j = i + 1; j < this.objects.length; j++) {
+                RXObjectHelper.hitObjects(this.objects[i], this.objects[j])
+            }   
+        }
     }
 
     clear = () => {

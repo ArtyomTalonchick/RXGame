@@ -53,11 +53,22 @@ export default class RXSprite {
             );
         } else {
             this.rxCanvas.context.fillStyle = this.options.fill;
-            this.rxCanvas.context.fillRect(
-                drowPosition[0] - this.options.size[0] / 2,
-                drowPosition[1] - this.options.size[1] / 2,
-                ...this.options.size
+            this.rxCanvas.context.strokeStyle = this.options.fill;
+            this.rxCanvas.context.beginPath();
+            this.rxCanvas.context.arc(
+                drowPosition[0],
+                drowPosition[1],
+                this.options.size[0] / 2 + this.options.size[1] / 2,
+                0,
+                2 * Math.PI,
             );
+            this.rxCanvas.context.stroke();
+            this.rxCanvas.context.fill();
+            // this.rxCanvas.context.fillRect(
+            //     drowPosition[0] - this.options.size[0] / 2,
+            //     drowPosition[1] - this.options.size[1] / 2,
+            //     ...this.options.size
+            // );
         }
     }
 }

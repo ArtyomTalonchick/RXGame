@@ -4,6 +4,7 @@ import RXCanvas from "./RXCanvas";
 
 const heroOptions = {
     position: [300, 30],
+    weight: 300,
 
     spriteOptions: {
         imageUrl: "./img/sprites.png",
@@ -34,28 +35,33 @@ const init = () => {
     const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
         fullMode: true,
         pattern: "./img/fill.jpg",
-        // resistance: 30,
-        // gravity: [0, 100],
+        updateInterval: .005,
+        bordersElasticity: .9,
+        resistance: 30,
+        gravity: [0, 300],
         border: true,
     });
 
-    // rxCanvas.createObjects(heroOptions);
-    // rxCanvas.createObjects(megamanOptions);
+    rxCanvas.createObjects(heroOptions);
+    rxCanvas.createObjects(megamanOptions);
 
-    [...Array(100)].forEach((_, i) => {
+    [...Array(20)].forEach((_, i) => {
+        const size = 30 + Math.random() * 10;
         rxCanvas.createObjects({
-            position: [Math.random() * 1000, Math.random() * 1000],
-            speed: [Math.random() * 500, Math.random() * 500 ],
+            position: [50 + Math.random() * 200, 50 + Math.random() * 200],
+            speed: [Math.random() * 50, Math.random() * 50 ],
+            weight: size ** 2,
             spriteOptions: {
                 fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
+                size: [size, size],
             },
         });
     })
 
-    rxCanvas.createObjects({position: [1000, 100], speed: [0, 800], spriteOptions: {fill: getColor()}});
-    rxCanvas.createObjects({position: [1000, 400], speed: [0, -400], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [1000, 100], speed: [0, 800], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [1000, 400], speed: [0, -400], spriteOptions: {fill: getColor()}});
     
-    // rxCanvas.createObjects({position: [500, 440], speed: [100, 0], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [500, 40], speed: [100, 0], weight: 100, spriteOptions: {fill: getColor()}});
     // rxCanvas.createObjects({position: [800, 440], speed: [-100, 0], spriteOptions: {fill: getColor()}});
 
     // rxCanvas.createObjects({position: [500, 100], speed: [100, 100], spriteOptions: {fill: getColor()}});

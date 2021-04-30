@@ -7,9 +7,10 @@ const getOptions = (context, options) => ({
     fullMode: true,
     fillStyle: options.pattern ? context.createPattern(RXResources.get(options.pattern), "repeat") : "rgb(255, 255, 255)",
     borders: true,
+    bordersElasticity: 1,
     gravity: [0, 0],
     resistance: 0,
-    updateInterval: 10,
+    updateInterval: .010,
     ...options,
 });
 
@@ -32,13 +33,15 @@ export default class RXCanvas {
     }
 
     onWindowResize = () => {
-        this.canvas.width = document.body.clientWidth;
-        this.canvas.height = document.body.clientHeight;
+        // this.canvas.width = document.body.clientWidth;
+        // this.canvas.height = document.body.clientHeight;
+        this.canvas.width = 500;
+        this.canvas.height = 500;
     }
 
     start = () => {
         this.lastUpdateTime = Date.now();
-        this.updateIntervalId = setInterval(() => this.updateLoop(), this.options.updateInterval);
+        this.updateLoop();
         this.renderLoop();
     }
 
@@ -52,6 +55,7 @@ export default class RXCanvas {
         const dt = (now - this.lastUpdateTime) / 1000.0;
         this.update(dt);
         this.lastUpdateTime = now;
+        setTimeout(this.updateLoop, this.options.updateInterval * 1000.0);
     }
 
     renderLoop = () => {

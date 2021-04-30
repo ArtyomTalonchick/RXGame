@@ -4,7 +4,7 @@ const getOptions = (options) => ({
     imageUrl: null,         // путь к изображению
     fill: "rgb(0, 0, 0)",   // цвет прямоугольник, если не задано изображение
     position: [0, 0],       // x и y координаты изображения на спрайт карте
-    size: [16, 16],         // размеры (только одного кадры)
+    size: [32, 32],         // размеры (только одного кадры)
     speed: 0,               // скорость анимации в фрейм/с
     frames: [0],            // массив индексов фреймов в порядке анимации
     dir: "horizontal",      // в каком направлении двигаться по спрайт карте: 'horizontal (по-умолчанию) или 'vertical'
@@ -58,7 +58,7 @@ export default class RXSprite {
             this.rxCanvas.context.arc(
                 drowPosition[0],
                 drowPosition[1],
-                this.options.size[0] / 2 + this.options.size[1] / 2,
+                this.options.size[0] / 4 + this.options.size[1] / 4,
                 0,
                 2 * Math.PI,
             );

@@ -37,33 +37,40 @@ export default class RXObject {
     ]);
 
     move = dt => {
-        if (this.rxCanvas.options.gravity) {
-            this.options.speed[0] += this.rxCanvas.options.gravity[0] * dt;
-            this.options.speed[1] += this.rxCanvas.options.gravity[1] * dt;
-        }
-        if (this.rxCanvas.options.resistance) {
-            this.options.speed[0] -= Math.sign(this.options.speed[0]) * this.rxCanvas.options.resistance * dt;
-            this.options.speed[1] -= Math.sign(this.options.speed[1]) * this.rxCanvas.options.resistance * dt;
-        }
-        this.checkBorder();
-        this.options.position[0] += this.options.speed[0] * dt;
-        this.options.position[1] += this.options.speed[1] * dt;
+        this.options.previousPosition = [...this.options.position];
+        [0, 1].forEach(i => {
+            if (this.rxCanvas.options.gravity) this.options.speed[i] += this.rxCanvas.options.gravity[i] * dt;
+            if (this.rxCanvas.options.resistance) {
+                const resistance = Math.sign(this.options.speed[i]) * this.rxCanvas.options.resistance * dt;
+                this.options.speed[i] = Math.abs(this.options.speed[i]) > Math.abs(resistance) ? this.options.speed[i] - resistance : 0;
+            }
+        });
+        this.checkBorder(dt);
+        [0, 1].forEach(i => {
+            this.options.position[i] += this.options.speed[i] * dt;
+        });
     }
 
-    checkBorder = () => {
+    checkBorder = (dt) => {
         if (!this.rxCanvas.options.border) return;
+
         const [x1, y1] = this.getLeftTop();
         const [x2, y2] = this.getRightBottom();
         if (x1 < 0) {
-            this.options.speed[0] = + Math.abs(this.options.speed[0]);
+            this.options.speed[0] = + this.rxCanvas.options.bordersElasticity * Math.abs(this.options.speed[0]);
+            if (Math.abs(this.options.speed[0]) <= Math.abs(this.rxCanvas.options.gravity[0] * dt)) this.options.speed[0] = 0;
         } else if (x2 > this.rxCanvas.canvas.width) {
-            this.options.speed[0] = - Math.abs(this.options.speed[0]);
+            this.options.speed[0] = - this.rxCanvas.options.bordersElasticity * Math.abs(this.options.speed[0]);
+            if (Math.abs(this.options.speed[0]) <= Math.abs(this.rxCanvas.options.gravity[0] * dt)) this.options.speed[0] = 0;
         }
+
         if (y1 < 0) {
-            this.options.speed[1] = + Math.abs(this.options.speed[1]);
+            this.options.speed[1] = + this.rxCanvas.options.bordersElasticity * Math.abs(this.options.speed[1]);
+            if (Math.abs(this.options.speed[1]) <= Math.abs(this.rxCanvas.options.gravity[1] * dt)) this.options.speed[1] = 0;
         } else if (y2 > this.rxCanvas.canvas.height) {
-            this.options.speed[1] = - Math.abs(this.options.speed[1]);
-        }        
+            this.options.speed[1] = - this.rxCanvas.options.bordersElasticity * Math.abs(this.options.speed[1]);
+            if (Math.abs(this.options.speed[1]) <= Math.abs(this.rxCanvas.options.gravity[1] * dt)) this.options.speed[1] = 0;
+        }
     }
 
     render = () => {

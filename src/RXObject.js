@@ -13,6 +13,7 @@ export default class RXObject {
     constructor(rxCanvas, options) {
         this.rxCanvas = rxCanvas;
         this.options = getOptions(options);
+        this.collisions = new Set();
         this.setSprite(this.options.spriteOptions);
         delete this.options.spriteOptions;
     }
@@ -37,7 +38,6 @@ export default class RXObject {
     ]);
 
     move = dt => {
-        this.options.previousPosition = [...this.options.position];
         [0, 1].forEach(i => {
             if (this.rxCanvas.options.gravity) this.options.speed[i] += this.rxCanvas.options.gravity[i] * dt;
             if (this.rxCanvas.options.resistance) {

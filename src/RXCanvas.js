@@ -33,10 +33,10 @@ export default class RXCanvas {
     }
 
     onWindowResize = () => {
-        // this.canvas.width = document.body.clientWidth;
-        // this.canvas.height = document.body.clientHeight;
-        this.canvas.width = 500;
-        this.canvas.height = 500;
+        this.canvas.width = document.body.clientWidth;
+        this.canvas.height = document.body.clientHeight;
+        // this.canvas.width = 500;
+        // this.canvas.height = 500;
     }
 
     start = () => {

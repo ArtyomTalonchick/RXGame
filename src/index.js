@@ -42,17 +42,17 @@ const init = () => {
         border: true,
     });
 
-    rxCanvas.createObjects(heroOptions);
-    rxCanvas.createObjects(megamanOptions);
+    // rxCanvas.createObjects(heroOptions);
+    // rxCanvas.createObjects(megamanOptions);
 
-    [...Array(20)].forEach((_, i) => {
+    [...Array(100)].forEach((_, i) => {
         const size = 30 + Math.random() * 10;
         rxCanvas.createObjects({
-            position: [50 + Math.random() * 200, 50 + Math.random() * 200],
+            position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
             speed: [Math.random() * 50, Math.random() * 50 ],
             weight: size ** 2,
             spriteOptions: {
-                fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
+                fill: getColor(),
                 size: [size, size],
             },
         });

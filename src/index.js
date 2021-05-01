@@ -57,7 +57,22 @@ const init = () => {
                 size: [size, size],
             },
         });
-    })
+    });
+    
+    [...Array(100)].forEach((_, i) => {
+        const size = 30 + Math.random() * 10;
+        rxCanvas.createObjects({
+            position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
+            speed: [Math.random() * 50, Math.random() * 50 ],
+            weight: size ** 2,
+            elasticity: 0.95 + Math.random() / 20,
+            zIndex: -1,
+            spriteOptions: {
+                fill: "black",
+                size: [size, size],
+            },
+        });
+    });
 
     // rxCanvas.createObjects({position: [1000, 100], speed: [0, 800], spriteOptions: {fill: getColor()}});
     // rxCanvas.createObjects({position: [1000, 400], speed: [0, -400], spriteOptions: {fill: getColor()}});

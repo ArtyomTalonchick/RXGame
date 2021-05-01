@@ -7,6 +7,7 @@ const getOptions = (options) => ({
     weight: 1,
     elasticity: 1,
     spriteOptions: null,
+    zIndex: 1,
     ...options,
 });
 

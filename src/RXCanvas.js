@@ -21,6 +21,7 @@ export default class RXCanvas {
         this.objects = [];
         this.lastTime = null;
         this.updateIntervalId = null;
+        this.isStarting = false;
         this.options = getOptions(this.context, options);
         
         if (this.options.fullMode) this.onWindowResize();
@@ -40,17 +41,22 @@ export default class RXCanvas {
     }
 
     start = () => {
+        this.isStarting = true;
+
         this.lastUpdateTime = Date.now();
         this.updateLoop();
         this.renderLoop();
     }
 
     stop = () => {
-        clearInterval(this.updateIntervalId);
+        this.isStarting = false;
         this.updateIntervalId = null;
     }
 
     updateLoop = () => {
+        if (!this.isStarting) return;
+        this.objects.sort((a, b) => a.options.zIndex - b.options.zIndex);
+
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000.0;
         this.update(dt);
@@ -66,6 +72,9 @@ export default class RXCanvas {
     createObjects = options => {
         const object = new RXObject(this, options);
         this.objects.push(object);
+        if (this.isStarting) {
+            this.objects.sort((a, b) => a.options.zIndex - b.options.zIndex);
+        }
         return object;
     }
 
@@ -77,7 +86,9 @@ export default class RXCanvas {
     checkCollision = () => {
         for (let i = 0; i < this.objects.length; i++) {
             for (let j = i + 1; j < this.objects.length; j++) {
-                RXObjectHelper.hitObjects(this.objects[i], this.objects[j])
+                if (this.objects[i].options.zIndex === this.objects[j].options.zIndex) {
+                    RXObjectHelper.hitObjects(this.objects[i], this.objects[j]);
+                }
             }   
         }
     }

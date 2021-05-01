@@ -51,6 +51,7 @@ const init = () => {
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
             speed: [Math.random() * 50, Math.random() * 50 ],
             weight: size ** 2,
+            elasticity: 0.95 + Math.random() / 20,
             spriteOptions: {
                 fill: getColor(),
                 size: [size, size],

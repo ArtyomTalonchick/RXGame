@@ -26,7 +26,7 @@ export default class RXObject {
 
     update = dt => {
         this.move(dt);
-        if (this.sprite) this.sprite.update(dt);
+        this.sprite.update(dt);
     }
 
     move = dt => {
@@ -38,6 +38,7 @@ export default class RXObject {
                 this.options.speed[i] = Math.abs(this.options.speed[i]) > Math.abs(resistance) ? this.options.speed[i] - resistance : 0;
             }
         });
+        this.options.previousPosition = [...this.options.position];
         [0, 1].forEach(i => {
             this.options.position[i] += this.options.speed[i] * dt;
         });
@@ -78,9 +79,7 @@ export default class RXObject {
     }
 
     render = () => {
-        if (this.sprite) {
-            this.sprite.render(this.options.position);
-        }
+        this.sprite.render(this.options.position);
         
     }
 }

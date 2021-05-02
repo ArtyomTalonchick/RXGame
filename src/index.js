@@ -51,6 +51,7 @@ const init = () => {
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
             speed: [Math.random() * 50, Math.random() * 50 ],
             weight: size ** 2,
+            // zIndex: Math.random() > .5,
             elasticity: 0.95 + Math.random() / 20,
             spriteOptions: {
                 fill: getColor(),
@@ -59,23 +60,9 @@ const init = () => {
         });
     });
     
-    [...Array(100)].forEach((_, i) => {
-        const size = 30 + Math.random() * 10;
-        rxCanvas.createObjects({
-            position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
-            speed: [Math.random() * 50, Math.random() * 50 ],
-            weight: size ** 2,
-            elasticity: 0.95 + Math.random() / 20,
-            zIndex: -1,
-            spriteOptions: {
-                fill: "black",
-                size: [size, size],
-            },
-        });
-    });
 
-    // rxCanvas.createObjects({position: [1000, 100], speed: [0, 800], spriteOptions: {fill: getColor()}});
-    // rxCanvas.createObjects({position: [1000, 400], speed: [0, -400], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects({position: [1000, 260], speed: [0, 0], spriteOptions: {fill: "red"}});
+    // rxCanvas.createObjects({position: [1000, 300], speed: [0, 0], spriteOptions: {fill: "green"}});
     
     // rxCanvas.createObjects({position: [500, 40], speed: [100, 0], weight: 100, spriteOptions: {fill: getColor()}});
     // rxCanvas.createObjects({position: [800, 440], speed: [-100, 0], spriteOptions: {fill: getColor()}});

@@ -24,6 +24,7 @@ export default class RXObject {
     constructor(rxCanvas, options) {
         this.rxCanvas = rxCanvas;
         this.options = getOptions(options);
+        this.state = {};
         this.collisions = new Set();
         this.setSprite(this.options.spriteOptions);
         delete this.options.spriteOptions;
@@ -54,18 +55,18 @@ export default class RXObject {
     move = () => {
         if (!this.options.controllability) return;
 
-        if (RXInput.isDown("DOWN") || RXInput.isDown("s")) {
+        if (this.options.controllability.down?.some(key => RXInput.isPressed(key))) {
             this.options.speed[1] = this.options.controllability.speed[1];
-        } else if (RXInput.isDown("UP") || RXInput.isDown("w")) {
+        } else if (this.options.controllability.up?.some(key => RXInput.isPressed(key)) &&
+            (!this.options.controllability.inertia || this.state.onFloor)) {
             this.options.speed[1] = -this.options.controllability.speed[1];
         } else if (!this.options.controllability.inertia) {
             this.options.speed[1] = 0;
         }
         
-    
-        if (RXInput.isDown("LEFT") || RXInput.isDown("a")) {
+        if (this.options.controllability.left?.some(key => RXInput.isPressed(key))) {
             this.options.speed[0] = -this.options.controllability.speed[0];
-        } else if (RXInput.isDown("RIGHT") || RXInput.isDown("d")) {
+        } else if (this.options.controllability.right?.some(key => RXInput.isPressed(key))) {
             this.options.speed[0] = this.options.controllability.speed[0];
         } else if (!this.options.controllability.inertia) {
             this.options.speed[0] = 0;
@@ -91,6 +92,7 @@ export default class RXObject {
 
     checkBorderForPosition = () => {
         if (!this.rxCanvas.options.border) return;
+        this.state.onFloor = false;
 
         if (this.options.position[0] - this.sprite.options.size[0] / 2 < 0) {
             this.options.position[0] = this.sprite.options.size[0] / 2;
@@ -102,6 +104,7 @@ export default class RXObject {
             this.options.position[1] = this.sprite.options.size[1] / 2;
         } else if (this.options.position[1] + this.sprite.options.size[1] / 2 > this.rxCanvas.canvas.height) {
             this.options.position[1] = this.rxCanvas.canvas.height - this.sprite.options.size[1] / 2;
+            this.state.onFloor = true;
         }
     }
 

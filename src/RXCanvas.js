@@ -58,7 +58,7 @@ export default class RXCanvas {
         this.objects.sort((a, b) => a.options.zIndex - b.options.zIndex);
 
         const now = Date.now();
-        const dt = (now - this.lastUpdateTime) / 1000.0;
+        const dt = Math.min((now - this.lastUpdateTime) / 1000.0, this.options.updateInterval * 1000.0);
         this.update(dt);
         this.lastUpdateTime = now;
         setTimeout(this.updateLoop, this.options.updateInterval * 1000.0);

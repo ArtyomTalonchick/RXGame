@@ -48,6 +48,8 @@ const hitObjects = (obj1, obj2) => {
     a1 = getAngle(v1x, v1y);
     a2 = getAngle(v2x, v2y);
     a = getAngle((x2 - x1), (y2 - y1));
+    if (y2 > y1) obj1.state.onFloor = true;
+    if (y2 < y1) obj2.state.onFloor = true;
 
     
     obj1.options.position = [...obj1.options.previousPosition];

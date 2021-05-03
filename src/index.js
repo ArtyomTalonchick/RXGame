@@ -4,8 +4,14 @@ import RXCanvas from "./RXCanvas";
 
 const heroOptions = {
     position: [300, 30],
-    weight: 300,
+    weight: 5000,
     speed: [100, 100],
+    controllability: {
+        up: ["w"],
+        down: ["s"],
+        left: ["a"],
+        right: ["d"],
+    },
 
     spriteOptions: {
         imageUrl: "./img/sprites.png",
@@ -20,7 +26,14 @@ const megamanOptions = {
     position: [100, 100],
     speed: [100, 100],
     weight: 3000,
-    controllability: {},
+    controllability: {
+        inertia: true,
+        speed: [100, 300],
+        up: ["up"],
+        // down: ["down"],
+        left: ["left"],
+        right: ["right"],
+    },
 
     spriteOptions: {
         imageUrl: "./img/megaman.png",
@@ -40,7 +53,7 @@ const addBalls = (rxCanvas, count = 10) => {
         rxCanvas.createObjects({
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
             speed: [Math.random() * 50, Math.random() * 50 ],
-            weight: size ** 2,
+            weight: 1000000,
             // zIndex: Math.random() > .5,
             elasticity: 0.95 + Math.random() / 20,
             spriteOptions: {
@@ -58,13 +71,13 @@ const init = () => {
         updateInterval: .005,
         bordersElasticity: .1,
         resistance: 30,
-        // gravity: [0, 300],
+        gravity: [0, 300],
         border: true,
     });
 
     // rxCanvas.createObjects(heroOptions);
     rxCanvas.createObjects(megamanOptions);
-    addBalls(rxCanvas, 10);
+    addBalls(rxCanvas, 1);
 
 
     rxCanvas.start();
@@ -78,3 +91,6 @@ RXResources.load([
 ]);
 
 RXResources.onReady(init);
+
+
+

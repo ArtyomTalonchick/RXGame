@@ -28,14 +28,15 @@ class RXInput {
 
     setKey = (event, status) => {
         const key = KEYS[event.keyCode] || String.fromCharCode(event.keyCode);
+        // console.log(`${event.keyCode} -- ${String.fromCharCode(event.keyCode)}`);
         this.pressedKeys[key] = status;
     }
 
-    isDown = key => this.pressedKeys[key.toUpperCase()];
+    isPressed = key => this.pressedKeys[key.toUpperCase()];
 }
 
 const rxInput = new RXInput();
 // Object.freeze(rxInput);
 export default {
-    isDown: rxInput.isDown,
+    isPressed: rxInput.isPressed,
 }

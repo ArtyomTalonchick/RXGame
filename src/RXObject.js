@@ -1,3 +1,4 @@
+import RXInput from "./helpers/RXInput";
 import RXSprite from "./RXOSprite";
 
 const getOptions = (options) => ({
@@ -9,6 +10,14 @@ const getOptions = (options) => ({
     spriteOptions: null,
     zIndex: 1,
     ...options,
+    ...(options.controllability && 
+        {
+            controllability: {
+                speed: [200, 200],
+                inertia: false,
+                ...options.controllability,
+        }
+    }),
 });
 
 export default class RXObject {
@@ -25,11 +34,7 @@ export default class RXObject {
     }
 
     update = dt => {
-        this.move(dt);
-        this.sprite.update(dt);
-    }
-
-    move = dt => {
+        this.move();
         this.checkBorderForSpeed();
         [0, 1].forEach(i => {
             if (this.rxCanvas.options.gravity) this.options.speed[i] += this.rxCanvas.options.gravity[i] * dt;
@@ -43,6 +48,28 @@ export default class RXObject {
             this.options.position[i] += this.options.speed[i] * dt;
         });
         this.checkBorderForPosition();
+        this.sprite.update(dt);
+    }
+
+    move = () => {
+        if (!this.options.controllability) return;
+
+        if (RXInput.isDown("DOWN") || RXInput.isDown("s")) {
+            this.options.speed[1] = this.options.controllability.speed[1];
+        } else if (RXInput.isDown("UP") || RXInput.isDown("w")) {
+            this.options.speed[1] = -this.options.controllability.speed[1];
+        } else if (!this.options.controllability.inertia) {
+            this.options.speed[1] = 0;
+        }
+        
+    
+        if (RXInput.isDown("LEFT") || RXInput.isDown("a")) {
+            this.options.speed[0] = -this.options.controllability.speed[0];
+        } else if (RXInput.isDown("RIGHT") || RXInput.isDown("d")) {
+            this.options.speed[0] = this.options.controllability.speed[0];
+        } else if (!this.options.controllability.inertia) {
+            this.options.speed[0] = 0;
+        }
     }
 
     checkBorderForSpeed = () => {

@@ -5,6 +5,7 @@ import RXCanvas from "./RXCanvas";
 const heroOptions = {
     position: [300, 30],
     weight: 300,
+    speed: [100, 100],
 
     spriteOptions: {
         imageUrl: "./img/sprites.png",
@@ -17,6 +18,9 @@ const heroOptions = {
 
 const megamanOptions = {
     position: [100, 100],
+    speed: [100, 100],
+    weight: 3000,
+    controllability: {},
 
     spriteOptions: {
         imageUrl: "./img/megaman.png",
@@ -27,25 +31,11 @@ const megamanOptions = {
     }
 };
 
-const getColor = () =>
-    `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
+const getColor = () => `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
 
 
-const init = () => {
-    const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
-        fullMode: true,
-        pattern: "./img/fill.jpg",
-        updateInterval: .005,
-        bordersElasticity: .9,
-        resistance: 30,
-        gravity: [0, 300],
-        border: true,
-    });
-
-    // rxCanvas.createObjects(heroOptions);
-    // rxCanvas.createObjects(megamanOptions);
-
-    [...Array(100)].forEach((_, i) => {
+const addBalls = (rxCanvas, count = 10) => {
+    [...Array(count)].forEach((_, i) => {
         const size = 30 + Math.random() * 10;
         rxCanvas.createObjects({
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
@@ -59,16 +49,22 @@ const init = () => {
             },
         });
     });
-    
+}
 
-    // rxCanvas.createObjects({position: [1000, 260], speed: [0, 0], spriteOptions: {fill: "red"}});
-    // rxCanvas.createObjects({position: [1000, 300], speed: [0, 0], spriteOptions: {fill: "green"}});
-    
-    // rxCanvas.createObjects({position: [500, 40], speed: [100, 0], weight: 100, spriteOptions: {fill: getColor()}});
-    // rxCanvas.createObjects({position: [800, 440], speed: [-100, 0], spriteOptions: {fill: getColor()}});
+const init = () => {
+    const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
+        fullMode: true,
+        pattern: "./img/fill.jpg",
+        updateInterval: .005,
+        bordersElasticity: .1,
+        resistance: 30,
+        // gravity: [0, 300],
+        border: true,
+    });
 
-    // rxCanvas.createObjects({position: [500, 100], speed: [100, 100], spriteOptions: {fill: getColor()}});
-    // rxCanvas.createObjects({position: [800, 400], speed: [-100, -100], spriteOptions: {fill: getColor()}});
+    // rxCanvas.createObjects(heroOptions);
+    rxCanvas.createObjects(megamanOptions);
+    addBalls(rxCanvas, 10);
 
 
     rxCanvas.start();

@@ -2,7 +2,6 @@ import RXInput from "./helpers/RXInput";
 import RXSprite from "./RXOSprite";
 
 const getOptions = (options) => ({
-    fullMode: true,
     position: [0, 0],
     speed: [0, 0],
     weight: 1,
@@ -19,6 +18,8 @@ const getOptions = (options) => ({
         }
     }),
 });
+
+const PLATFORM_DELTA = 0;
 
 export default class RXObject {
     constructor(rxCanvas, options) {
@@ -58,11 +59,12 @@ export default class RXObject {
         if (this.options.controllability.down?.some(key => RXInput.isPressed(key))) {
             this.options.speed[1] = this.options.controllability.speed[1];
         } else if (this.options.controllability.up?.some(key => RXInput.isPressed(key)) &&
-            (!this.options.controllability.inertia || this.state.onFloor)) {
+            (!this.options.controllability.floor || this.state.onFloor)) {
             this.options.speed[1] = -this.options.controllability.speed[1];
-        } else if (!this.options.controllability.inertia) {
-            this.options.speed[1] = 0;
-        }
+        } 
+        // else if (!this.options.controllability.inertia && this.options.speed[1] < 0 ) {
+        //      this.options.speed[1] = 0;
+        // }
         
         if (this.options.controllability.left?.some(key => RXInput.isPressed(key))) {
             this.options.speed[0] = -this.options.controllability.speed[0];
@@ -76,7 +78,7 @@ export default class RXObject {
     checkBorderForSpeed = () => {
         if (!this.rxCanvas.options.border) return;
 
-        const k = Math.sqrt(this.options.elasticity ** 2 / 2 + this.rxCanvas.options.bordersElasticity ** 2 / 2);
+        const k = Math.sqrt(this.options.elasticity * this.rxCanvas.options.bordersElasticity);
         if (this.options.position[0] - this.sprite.options.size[0] / 2 <= 0) {
             this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
         } else if (this.options.position[0] + this.sprite.options.size[0] / 2 >= this.rxCanvas.canvas.width) {
@@ -88,6 +90,29 @@ export default class RXObject {
         } else if (this.options.position[1] + this.sprite.options.size[1] / 2 >= this.rxCanvas.canvas.height) {
             this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
         }
+
+        this.rxCanvas.platforms.forEach(platform => {
+            if (platform.options.zIndex === this.options.zIndex) {
+                const k = Math.sqrt(this.options.elasticity * platform.options.elasticity);
+
+                if (this.options.position[0] + this.sprite.options.size[0]/2 > platform.options.position[0] 
+                    && this.options.position[0] - this.sprite.options.size[0]/2 < platform.options.position[0] + platform.options.size[0]) {
+                    if (Math.abs(this.options.position[1] + this.sprite.options.size[1]/2 - platform.options.position[1]) < 2) {
+                        this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
+                    } else if (Math.abs(this.options.position[1] - this.sprite.options.size[1]/2 - platform.options.position[1] - platform.options.size[1]) < 2) {
+                        this.options.speed[1] = + k * Math.abs(this.options.speed[1]);
+                    }
+                }
+                if (this.options.position[1] + this.sprite.options.size[1]/2 > platform.options.position[1] 
+                    && this.options.position[1] - this.sprite.options.size[1]/2 < platform.options.position[1] + platform.options.size[1]) {
+                    if (Math.abs(this.options.position[0] + this.sprite.options.size[0]/2 - platform.options.position[0]) < 2) {
+                        this.options.speed[0] = - k * Math.abs(this.options.speed[0]);
+                    } else if (Math.abs(this.options.position[0] - this.sprite.options.size[0]/2 - platform.options.position[0] - platform.options.size[0]) < 2) {
+                        this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
+                    } 
+                }
+            }
+        });
     }
 
     checkBorderForPosition = () => {
@@ -106,6 +131,23 @@ export default class RXObject {
             this.options.position[1] = this.rxCanvas.canvas.height - this.sprite.options.size[1] / 2;
             this.state.onFloor = true;
         }
+
+        
+        this.rxCanvas.platforms.forEach(platform => {
+            if (platform.options.zIndex === this.options.zIndex) {
+
+                if (this.options.position[0] + this.sprite.options.size[0]/2 > platform.options.position[0] 
+                    && this.options.position[0] - this.sprite.options.size[0]/2 < platform.options.position[0] + platform.options.size[0]) {
+
+                    if (Math.abs(this.options.position[1] + this.sprite.options.size[1]/2 - platform.options.position[1]) < 2) {
+                        this.options.position[1] = platform.options.position[1] - this.sprite.options.size[1]/2;
+                        this.state.onFloor = true;
+                    } else if (Math.abs(this.options.position[1] - this.sprite.options.size[1]/2 - platform.options.position[1] - platform.options.size[1]) < 2) {
+                        this.options.position[1] = platform.options.position[1] + platform.options.size[1] + this.sprite.options.size[1]/2;
+                    }
+                }
+            }
+        });
     }
 
     render = () => {

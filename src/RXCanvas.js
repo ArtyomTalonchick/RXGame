@@ -1,7 +1,7 @@
 import RXResources from "./helpers/RXResources";
 import RXObject from "./RXObject";
+import RXPlatform from "./RXPlatform";
 import RXObjectHelper from "./helpers/RXObjectHelper";
-// import { hitObjects } from "./helpers/RXObjectHelper";
 
 const getOptions = (context, options) => ({
     fullMode: true,
@@ -19,6 +19,7 @@ export default class RXCanvas {
         this.canvas = element;
         this.context = this.canvas.getContext("2d");
         this.objects = [];
+        this.platforms = [];
         this.lastTime = null;
         this.updateIntervalId = null;
         this.isStarting = false;
@@ -42,6 +43,8 @@ export default class RXCanvas {
 
     start = () => {
         this.isStarting = true;
+        this.objects.sort((a, b) => a.options.zIndex - b.options.zIndex);
+        this.platforms.sort((a, b) => a.options.zIndex - b.options.zIndex);
 
         this.lastUpdateTime = Date.now();
         this.updateLoop();
@@ -55,7 +58,6 @@ export default class RXCanvas {
 
     updateLoop = () => {
         if (!this.isStarting) return;
-        this.objects.sort((a, b) => a.options.zIndex - b.options.zIndex);
 
         const now = Date.now();
         const dt = Math.min((now - this.lastUpdateTime) / 1000.0, this.options.updateInterval * 1000.0);
@@ -78,6 +80,15 @@ export default class RXCanvas {
         return object;
     }
 
+    createStatics = options => {
+        const platform = new RXPlatform(this, options);
+        this.platforms.push(platform);
+        if (this.isStarting) {
+            this.platforms.sort((a, b) => a.options.zIndex - b.options.zIndex);
+        }
+        return platform;
+    }
+
     update = dt => {
         this.objects.forEach(object => object.update(dt));
         this.checkCollision();
@@ -89,7 +100,7 @@ export default class RXCanvas {
                 if (this.objects[i].options.zIndex === this.objects[j].options.zIndex) {
                     RXObjectHelper.hitObjects(this.objects[i], this.objects[j]);
                 }
-            }   
+            }
         }
     }
 
@@ -100,6 +111,7 @@ export default class RXCanvas {
 
     render = () => {
         this.clear();
-        this.objects.forEach(object => object.render());
+        this.objects.forEach(item => item.render());
+        this.platforms.forEach(item => item.render());
     }
 }

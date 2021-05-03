@@ -24,25 +24,24 @@ export default class RXSprite {
         this.frameStep += this.options.speed * dt;
     }
 
-    render = (drowPosition = [0, 0]) => {
-        let frame = 0;
-    
-        if (this.options.speed > 0) {
-            const max = this.options.frames.length;
-            const frameIndex = Math.floor(this.frameStep);
-            frame = this.options.frames[frameIndex % max];
-            if (this.once && frameIndex >= max) return this.done = true;
-        }
-    
-        let [sx, sy] = this.options.position;
-    
-        if (this.options.dir === "vertical") {
-            sy += frame * this.options.size[1];
-        } else {
-            sx += frame * this.options.size[0];
-        }
-    
+    render = (drowPosition = [0, 0]) => {    
         if (this.options.imageUrl && RXResources.get(this.options.imageUrl)) {
+            let frame = 0;
+        
+            if (this.options.speed > 0) {
+                const max = this.options.frames.length;
+                const frameIndex = Math.floor(this.frameStep);
+                frame = this.options.frames[frameIndex % max];
+                if (this.once && frameIndex >= max) return this.done = true;
+            }
+        
+            let [sx, sy] = this.options.position;
+        
+            if (this.options.dir === "vertical") {
+                sy += frame * this.options.size[1];
+            } else {
+                sx += frame * this.options.size[0];
+            }
             this.rxCanvas.context.drawImage(
                 RXResources.get(this.options.imageUrl),
                 sx, sy,

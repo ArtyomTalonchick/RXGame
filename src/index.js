@@ -27,8 +27,9 @@ const megamanOptions = {
     speed: [100, 100],
     weight: 3000,
     controllability: {
-        inertia: true,
-        speed: [100, 300],
+        // inertia: true,
+        floor: true,
+        speed: [200, 550],
         up: ["up"],
         // down: ["down"],
         left: ["left"],
@@ -52,15 +53,23 @@ const addBalls = (rxCanvas, count = 10) => {
         const size = 30 + Math.random() * 10;
         rxCanvas.createObjects({
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
-            speed: [Math.random() * 50, Math.random() * 50 ],
+            speed: [210, Math.random() * 500 ],
             weight: 1000000,
-            // zIndex: Math.random() > .5,
-            elasticity: 0.95 + Math.random() / 20,
+            zIndex: 1,
+            elasticity: 1,
             spriteOptions: {
                 fill: getColor(),
                 size: [size, size],
             },
         });
+    });
+}
+const addStatic = (rxCanvas) => {
+    rxCanvas.createStatics({
+        fillStyle: 'red',
+        position: [300, 300],
+        size: [300, 30],
+        elasticity: 0,
     });
 }
 
@@ -69,8 +78,8 @@ const init = () => {
         fullMode: true,
         pattern: "./img/fill.jpg",
         updateInterval: .005,
-        bordersElasticity: .1,
-        resistance: 30,
+        bordersElasticity: 1,
+        resistance: 10,
         gravity: [0, 300],
         border: true,
     });
@@ -78,6 +87,7 @@ const init = () => {
     // rxCanvas.createObjects(heroOptions);
     rxCanvas.createObjects(megamanOptions);
     addBalls(rxCanvas, 1);
+    addStatic(rxCanvas);
 
 
     rxCanvas.start();

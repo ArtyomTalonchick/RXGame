@@ -1,6 +1,9 @@
 import _ from "lodash";
 import RXResources from "./helpers/RXResources";
 import RXCanvas from "./RXCanvas";
+import { pipe } from "rxjs";
+import { debounceTime, filter } from 'rxjs/operators';
+
 
 const heroOptions = {
     position: [300, 30],
@@ -23,15 +26,17 @@ const heroOptions = {
 };
 
 const megamanOptions = {
-    position: [100, 100],
+    position: [1000, 100],
     speed: [100, 100],
     weight: 3000,
+    elasticity: .9,
+    weightlessness: true,
     controllability: {
-        // inertia: true,
-        floor: true,
-        speed: [200, 550],
+        inertia: false,
+        // floor: true,
+        speed: [200, 200],
         up: ["up"],
-        // down: ["down"],
+        down: ["down"],
         left: ["left"],
         right: ["right"],
     },
@@ -65,15 +70,23 @@ const addBalls = (rxCanvas, count = 10) => {
     });
 }
 const addStatic = (rxCanvas) => {
-    rxCanvas.createStatics({
+    rxCanvas.createPlatforms({
         fillStyle: 'red',
         position: [300, 300],
         size: [300, 30],
-        elasticity: 0,
+        elasticity: 1,
+    });
+    rxCanvas.createPlatforms({
+        fillStyle: 'green',
+        position: [500, 300],
+        size: [30, 1000],
+        elasticity: 1,
     });
 }
 
-const init = () => {
+const initGame = () => {
+    let resolveResult, rejectResult;
+    const resultPromise = new Promise((resolve, reject) => {resolveResult = resolve; rejectResult = reject});
     const rxCanvas = new RXCanvas(document.getElementById("canvas"), {
         fullMode: true,
         pattern: "./img/fill.jpg",
@@ -83,15 +96,31 @@ const init = () => {
         gravity: [0, 300],
         border: true,
     });
+    const megaman = rxCanvas.createObjects(megamanOptions);
+    const subscription = rxCanvas.collisions$
+        .pipe(
+            // debounceTime(100),
+            filter(e => e?.objects?.length > 1),
+            filter(e => e.objects.some(obj => obj === megaman))
+        ).subscribe(e => {
+            subscription.unsubscribe();
+            rxCanvas.stop();
+            rejectResult();           
+        });
+    
+    setTimeout(() => {
+        subscription.unsubscribe();
+        rxCanvas.stop();
+        resolveResult();  
+    }, 10000);
 
     // rxCanvas.createObjects(heroOptions);
-    rxCanvas.createObjects(megamanOptions);
-    addBalls(rxCanvas, 1);
+    addBalls(rxCanvas, 15);
     addStatic(rxCanvas);
 
-
     rxCanvas.start();
-
+    
+    return resultPromise;
 }
 
 RXResources.load([
@@ -100,7 +129,23 @@ RXResources.load([
     "./img/megaman.png",
 ]);
 
-RXResources.onReady(init);
+const start = () => {
+    // const startTime = Date.now();
+    initGame()
+        .then(() => {
+            alert("YOU ARE WIN!!!");
+        })
+        .catch(() => {
+            alert("Game over(");
+        })
+        .finally(() => {
+            start()
+        });
+}
+
+RXResources.onReady(() => {
+    start();
+});
 
 
 

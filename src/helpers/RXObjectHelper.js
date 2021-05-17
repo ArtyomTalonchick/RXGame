@@ -70,6 +70,8 @@ const hitObjects = (obj1, obj2) => {
     obj1.options.speed[1] *= k;
     obj2.options.speed[0] *= k;
     obj2.options.speed[1] *= k;
+
+    obj1.rxCanvas.collisions$.next({objects: [obj1, obj2]});
 }
 
 export default {

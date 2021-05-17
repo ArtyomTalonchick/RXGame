@@ -1,3 +1,4 @@
+import { BehaviorSubject } from "rxjs";
 import RXResources from "./helpers/RXResources";
 import RXObject from "./RXObject";
 import RXPlatform from "./RXPlatform";
@@ -20,8 +21,8 @@ export default class RXCanvas {
         this.context = this.canvas.getContext("2d");
         this.objects = [];
         this.platforms = [];
-        this.lastTime = null;
-        this.updateIntervalId = null;
+        this.collisions$ = new BehaviorSubject();
+        this.lastUpdateTime = null;
         this.isStarting = false;
         this.options = getOptions(this.context, options);
         
@@ -53,7 +54,6 @@ export default class RXCanvas {
 
     stop = () => {
         this.isStarting = false;
-        this.updateIntervalId = null;
     }
 
     updateLoop = () => {
@@ -80,7 +80,7 @@ export default class RXCanvas {
         return object;
     }
 
-    createStatics = options => {
+    createPlatforms = options => {
         const platform = new RXPlatform(this, options);
         this.platforms.push(platform);
         if (this.isStarting) {

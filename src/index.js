@@ -46,7 +46,7 @@ const megamanOptions = {
         position: [0, 0],
         size: [31, 28],
         speed: 10,
-        frames: [0, 1, 2],
+        // frames: [0, 1, 2],
     }
 };
 
@@ -55,15 +55,15 @@ const getColor = () => `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Mat
 
 const addBalls = (rxCanvas, count = 10) => {
     [...Array(count)].forEach((_, i) => {
-        const size = 30 + Math.random() * 10;
+        const size = 30;// + Math.random() * 10;
         rxCanvas.createObjects({
             position: [30 + (i % 35 ) * 50, 30 + Math.floor(i / 35 ) * 50],
-            speed: [210, Math.random() * 500 ],
+            // speed: [210, Math.random() * 500 ],
             weight: 1000000,
             zIndex: 1,
             elasticity: 1,
             spriteOptions: {
-                fill: getColor(),
+                fill: "red",//getColor(),
                 size: [size, size],
             },
         });
@@ -93,7 +93,7 @@ const initGame = () => {
         updateInterval: .005,
         bordersElasticity: 1,
         resistance: 10,
-        gravity: [0, 300],
+        // gravity: [0, 300],
         border: true,
     });
     const megaman = rxCanvas.createObjects(megamanOptions);
@@ -112,7 +112,7 @@ const initGame = () => {
         subscription.unsubscribe();
         rxCanvas.stop();
         resolveResult();  
-    }, 10000);
+    }, 1000000);
 
     // rxCanvas.createObjects(heroOptions);
     addBalls(rxCanvas, 15);

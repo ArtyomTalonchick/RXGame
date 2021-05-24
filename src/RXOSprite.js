@@ -17,14 +17,13 @@ export default class RXSprite {
         this.rxCanvas = rxCanvas;
         this.options = getOptions(options);
         this.frameStep = 0;
-        this.done = false;
     }
 
     update = dt => {
         this.frameStep += this.options.speed * dt;
     }
 
-    render = (drowPosition = [0, 0]) => {    
+    render = (drowPosition = [0, 0]) => {
         if (this.options.imageUrl && RXResources.get(this.options.imageUrl)) {
             let frame = 0;
         
@@ -32,7 +31,7 @@ export default class RXSprite {
                 const max = this.options.frames.length;
                 const frameIndex = Math.floor(this.frameStep);
                 frame = this.options.frames[frameIndex % max];
-                if (this.once && frameIndex >= max) return this.done = true;
+                if (this.options.once && frameIndex >= max) frame = this.options.frames[max - 1];
             }
         
             let [sx, sy] = this.options.position;

@@ -79,18 +79,18 @@ export default class RXObject {
 
         const k = Math.sqrt(this.options.elasticity * this.rxCanvas.options.bordersElasticity);
         if (this.options.position[0] - this.sprite.options.size[0] / 2 <= 0) {
-            this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
+            if (this.options.speed[0] < 0) this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
             this.rxCanvas.collisions$.next({objects: [this], side: "left" });
         } else if (this.options.position[0] + this.sprite.options.size[0] / 2 >= this.rxCanvas.canvas.width) {
-            this.options.speed[0] = - k * Math.abs(this.options.speed[0]);
+            if (this.options.speed[0] > 0) this.options.speed[0] = - k * Math.abs(this.options.speed[0]);
             this.rxCanvas.collisions$.next({objects: [this], side: "right" });
         }
 
         if (this.options.position[1] - this.sprite.options.size[1] / 2 <= 0) {
-            this.options.speed[1] = + k * Math.abs(this.options.speed[1]);
+            if (this.options.speed[1] < 0) this.options.speed[1] = + k * Math.abs(this.options.speed[1]);
             this.rxCanvas.collisions$.next({objects: [this], side: "top" });
         } else if (this.options.position[1] + this.sprite.options.size[1] / 2 >= this.rxCanvas.canvas.height) {
-            this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
+            if (this.options.speed[1] > 0) this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
             this.rxCanvas.collisions$.next({objects: [this], side: "bottom" });
         }
 
@@ -101,20 +101,20 @@ export default class RXObject {
                 if (this.options.position[0] + this.sprite.options.size[0]/2 > platform.options.position[0] 
                     && this.options.position[0] - this.sprite.options.size[0]/2 < platform.options.position[0] + platform.options.size[0]) {
                     if (Math.abs(this.options.position[1] + this.sprite.options.size[1]/2 - platform.options.position[1]) < 2) {
-                        this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
+                        if (this.options.speed[1] > 0) this.options.speed[1] = - k * Math.abs(this.options.speed[1]);
                         this.rxCanvas.collisions$.next({objects: [this], platforms: [platform], side: "bottom" });
                     } else if (Math.abs(this.options.position[1] - this.sprite.options.size[1]/2 - platform.options.position[1] - platform.options.size[1]) < 2) {
-                        this.options.speed[1] = + k * Math.abs(this.options.speed[1]);
+                        if (this.options.speed[1] < 0) this.options.speed[1] = + k * Math.abs(this.options.speed[1]);
                         this.rxCanvas.collisions$.next({objects: [this], platforms: [platform], side: "top" });
                     }
                 }
                 if (this.options.position[1] + this.sprite.options.size[1]/2 > platform.options.position[1] 
                     && this.options.position[1] - this.sprite.options.size[1]/2 < platform.options.position[1] + platform.options.size[1]) {
                     if (Math.abs(this.options.position[0] + this.sprite.options.size[0]/2 - platform.options.position[0]) < 2) {
-                        this.options.speed[0] = - k * Math.abs(this.options.speed[0]);
+                        if (this.options.speed[0] > 0) this.options.speed[0] = - k * Math.abs(this.options.speed[0]);
                         this.rxCanvas.collisions$.next({objects: [this], platforms: [platform], side: "right" });
                     } else if (Math.abs(this.options.position[0] - this.sprite.options.size[0]/2 - platform.options.position[0] - platform.options.size[0]) < 2) {
-                        this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
+                        if (this.options.speed[0] < 0) this.options.speed[0] = + k * Math.abs(this.options.speed[0]);
                         this.rxCanvas.collisions$.next({objects: [this], platforms: [platform], side: "left" });
                     } 
                 }
@@ -146,10 +146,10 @@ export default class RXObject {
                 if (this.options.position[0] + this.sprite.options.size[0]/2 > platform.options.position[0] 
                     && this.options.position[0] - this.sprite.options.size[0]/2 < platform.options.position[0] + platform.options.size[0]) {
 
-                    if (Math.abs(this.options.position[1] + this.sprite.options.size[1]/2 - platform.options.position[1]) < 2) {
+                    if (Math.abs(this.options.position[1] + this.sprite.options.size[1]/2 - platform.options.position[1]) < 0) {
                         this.options.position[1] = platform.options.position[1] - this.sprite.options.size[1]/2;
                         this.state.onFloor = true;
-                    } else if (Math.abs(this.options.position[1] - this.sprite.options.size[1]/2 - platform.options.position[1] - platform.options.size[1]) < 2) {
+                    } else if (Math.abs(this.options.position[1] - this.sprite.options.size[1]/2 - platform.options.position[1] - platform.options.size[1]) < 0) {
                         this.options.position[1] = platform.options.position[1] + platform.options.size[1] + this.sprite.options.size[1]/2;
                     }
                 }

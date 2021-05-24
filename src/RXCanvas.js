@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { Subject } from "rxjs";
 import RXResources from "./helpers/RXResources";
 import RXObject from "./RXObject";
 import RXPlatform from "./RXPlatform";
@@ -6,12 +6,15 @@ import RXObjectHelper from "./helpers/RXObjectHelper";
 
 const getOptions = (context, options) => ({
     fullMode: true,
+    size: null,
     fillStyle: options.pattern ? context.createPattern(RXResources.get(options.pattern), "repeat") : "rgb(255, 255, 255)",
     borders: true,
     bordersElasticity: 1,
     gravity: [0, 0],
     resistance: 0,
     updateInterval: .010,
+    size: null,
+    test: false,
     ...options,
 });
 
@@ -21,12 +24,17 @@ export default class RXCanvas {
         this.context = this.canvas.getContext("2d");
         this.objects = [];
         this.platforms = [];
-        this.collisions$ = new BehaviorSubject();
+        this.collisions$ = new Subject();
         this.lastUpdateTime = null;
         this.isStarting = false;
         this.options = getOptions(this.context, options);
         
-        if (this.options.fullMode) this.onWindowResize();
+        if (this.options.fullMode) {
+            this.onWindowResize();
+        } else if (this.options.size) {
+            this.canvas.width = this.options.size[0];
+            this.canvas.height = this.options.size[1];
+        }
 
         this.bindEvents();
     }
@@ -38,8 +46,6 @@ export default class RXCanvas {
     onWindowResize = () => {
         this.canvas.width = document.body.clientWidth;
         this.canvas.height = document.body.clientHeight;
-        // this.canvas.width = 500;
-        // this.canvas.height = 500;
     }
 
     start = () => {
@@ -60,13 +66,16 @@ export default class RXCanvas {
         if (!this.isStarting) return;
 
         const now = Date.now();
-        const dt = Math.min((now - this.lastUpdateTime) / 1000.0, this.options.updateInterval * 1000.0);
+        const dt = !this.options.test 
+            ? Math.min((now - this.lastUpdateTime) / 1000.0, this.options.updateInterval)
+            : this.options.updateInterval;
         this.update(dt);
         this.lastUpdateTime = now;
-        setTimeout(this.updateLoop, this.options.updateInterval * 1000.0);
+        setTimeout(this.updateLoop, !this.options.test ? this.options.updateInterval * 1000.0 : 0);
     }
 
     renderLoop = () => {
+        if (!this.isStarting) return;
         this.render();
         requestAnimationFrame(this.renderLoop);
     }

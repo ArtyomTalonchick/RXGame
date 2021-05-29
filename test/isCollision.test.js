@@ -1,5 +1,5 @@
 import test from "ava";
-import collisionOtions from "./collisionOtions";
+import collisionOtions from "./isCollisionOtions";
 
 import RXObject from "../src/RXObject";
 import RXCanvas from "../src/RXCanvas";

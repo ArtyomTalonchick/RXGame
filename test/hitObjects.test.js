@@ -1,5 +1,5 @@
 import test from "ava";
-import hitOptions from "./hitOptions";
+import hitOptions from "./hitObjectsOptions";
 
 import RXObject from "../src/RXObject";
 import RXCanvas from "../src/RXCanvas";

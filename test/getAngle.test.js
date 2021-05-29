@@ -1,5 +1,5 @@
 import test from "ava";
-import angleOptions from "./angleOptions";
+import angleOptions from "./getAngleOptions";
 
 import RXObjectHelper from "../src/helpers/RXObjectHelper";
 

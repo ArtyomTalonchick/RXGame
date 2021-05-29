@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "serve": "webpack serve",
-    "build": "webpack"
+    "build": "webpack",
+    "geminiTest": "gemini test",
+    "geminiUpdate": "gemini update",
+    "unitTest": "ava"
   },
   "author": "",
   "license": "ISC",
@@ -17,10 +20,23 @@
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.0",
+    "ava": "^3.15.0",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^8.1.1",
+    "esm": "^3.2.25",
+    "jsdom": "^16.6.0",
     "webpack": "^5.36.1",
     "webpack-cli": "^4.6.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "ava": {
+    "files": [
+      "test/*.test.js"
+    ],
+    "require": [
+      "esm",
+      "./test-browser-env.js"
+    ],
+    "verbose": true
   }
 }

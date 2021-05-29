@@ -3,6 +3,7 @@ import RXSprite from "./RXOSprite";
 
 const getOptions = (options) => ({
     position: [0, 0],
+    previousPosition: options.position || [0, 0],
     speed: [0, 0],
     weight: 1,
     elasticity: 1,
@@ -56,18 +57,18 @@ export default class RXObject {
     move = () => {
         if (!this.options.controllability) return;
 
-        if (this.options.controllability.down?.some(key => RXInput.isPressed(key))) {
+        if (this.options.controllability.down.some(key => RXInput.isPressed(key))) {
             this.options.speed[1] = this.options.controllability.speed[1];
-        } else if (this.options.controllability.up?.some(key => RXInput.isPressed(key)) &&
+        } else if (this.options.controllability.up.some(key => RXInput.isPressed(key)) &&
             (!this.options.controllability.floor || this.state.onFloor)) {
             this.options.speed[1] = -this.options.controllability.speed[1];
         } else if (!this.options.controllability.inertia[1]) {
              this.options.speed[1] = 0;
         }
         
-        if (this.options.controllability.left?.some(key => RXInput.isPressed(key))) {
+        if (this.options.controllability.left.some(key => RXInput.isPressed(key))) {
             this.options.speed[0] = -this.options.controllability.speed[0];
-        } else if (this.options.controllability.right?.some(key => RXInput.isPressed(key))) {
+        } else if (this.options.controllability.right.some(key => RXInput.isPressed(key))) {
             this.options.speed[0] = this.options.controllability.speed[0];
         } else if (!this.options.controllability.inertia[0]) {
             this.options.speed[0] = 0;

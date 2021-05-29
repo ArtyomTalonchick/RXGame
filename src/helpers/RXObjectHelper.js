@@ -1,5 +1,7 @@
 let x1, y1, x2, y2, r1, r2, d1, d2, k, v1x, v1y, v2x, v2y, m1, m2, v1, v2, a1, a2, a;
 
+const EPS = 1e-12;
+
 const isCollision = (obj1, obj2) => {
     x1 = obj1.options.position[0];
     y1 = obj1.options.position[1];
@@ -18,7 +20,7 @@ const isCollision = (obj1, obj2) => {
     y2 = obj2.options.position[1] + obj2.options.speed[1] * k;
     d2 = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
     
-    return d2 <= d1;
+    return d2 + EPS <= d1;
 }
 
 const getAngle = (x, y) => {
@@ -75,5 +77,7 @@ const hitObjects = (obj1, obj2) => {
 }
 
 export default {
+    isCollision,
+    getAngle,
     hitObjects
 }

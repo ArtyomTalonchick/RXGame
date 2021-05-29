@@ -8,7 +8,7 @@ import RXObjectHelper from "../src/helpers/RXObjectHelper";
 const canvas = document.createElement("canvas");
 const rxCanvas = new RXCanvas(canvas, {});
 
-const getObject = (position = [0, 0], speed = [0, 0], options = {}) => 
+const getObject = (position, speed, options = {}) => 
   new RXObject(rxCanvas, {
     position,
     speed,
@@ -30,3 +30,5 @@ hitOptions.forEach(options => {
     t.is(getNumber(obj1.options.speed[1]), getNumber(options[3][1][1]));
   });
 });
+
+

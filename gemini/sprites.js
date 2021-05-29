@@ -2,7 +2,7 @@ gemini.suite("sprites", (suite) => {
     suite.setUrl("/")
         .setCaptureElements("#canvas")
         .capture("1", (actions, find) => {
-            actions.click("#spritesTest");
+            actions.click("#spritesScenario");
         })
         .capture("2", (actions, find) => {
             actions.click("#nextSprite");

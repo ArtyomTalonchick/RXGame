@@ -1,10 +1,9 @@
 export default [
-    // by x
     [
       "X-axis and move in different directions", //name
-      [[0, 0], [0, 0]], //first object: position[]; speed[]; options{}
-      [[10, 0], [1, 0]], //second object: position[]; speed[]
-      [[0, 0], [1, 0]],  //result speed
+      [[0, 0], [0, 0]],       //first object: position[]; speed[]; options{}
+      [[10, 0], [1, 0]],      //second object: position[]; speed[]
+      [[0, 0], [1, 0]],       //result speed
     ],
     [
       "X-axis and move towards each other",

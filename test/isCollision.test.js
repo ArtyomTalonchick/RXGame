@@ -8,7 +8,8 @@ import RXObjectHelper from "../src/helpers/RXObjectHelper";
 const canvas = document.createElement("canvas");
 const rxCanvas = new RXCanvas(canvas, {});
 
-const getObject = (position, speed) => new RXObject(rxCanvas, { position, speed, spriteOptions: { size: [10, 10] }});
+const getObject = (position, speed) => 
+  new RXObject(rxCanvas, { position, speed, spriteOptions: { size: [10, 10] }});
 
 collisionOtions.forEach(options => {  
   test(options[0], t => {

@@ -37,6 +37,6 @@
       "esm",
       "./test-browser-env.js"
     ],
-    "verbose": true
+    "verbose": false
   }
 }

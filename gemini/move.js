@@ -2,7 +2,7 @@ gemini.suite("move", (suite) => {
     suite.setUrl("/")
         .setCaptureElements("#canvas")
         .capture("moveLeft", (actions, find) => {
-            actions.click("#moveTest");
+            actions.click("#moveScenario");
             actions.wait(500);
             actions.executeJS(window => window.document.dispatchEvent(new KeyboardEvent("keydown", { "keyCode": 10 })));
             actions.wait(500);

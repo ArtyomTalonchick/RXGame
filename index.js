@@ -3,7 +3,7 @@ import RXObject from "./src/RXObject";
 import RXSprite from "./src/RXSprite";
 import RXPlatform from "./src/RXPlatform";
 
-import RXResources from "./src/helpers/RXObjectHelper";
+import RXResources from "./src/helpers/RXResources";
 
 export {
     RXCanvas,

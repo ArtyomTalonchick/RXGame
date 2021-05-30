@@ -1,4 +1,3 @@
-import _ from "lodash";
 import RXResources from "./helpers/RXResources";
 import RXCanvas from "./RXCanvas";
 import { pipe } from "rxjs";

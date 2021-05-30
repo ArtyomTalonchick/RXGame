@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Game engine",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "serve": "webpack serve",
     "build": "webpack",
@@ -10,7 +11,11 @@
     "geminiUpdate": "gemini update",
     "unitTest": "ava"
   },
-  "author": "",
+  "author": "artyomTalonchick@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArtyomTalonchick/RXGame.git"
+  },
   "license": "ISC",
   "dependencies": {
     "html-reporter": "^5.16.4",

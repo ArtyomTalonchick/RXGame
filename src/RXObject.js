@@ -1,5 +1,5 @@
 import RXInput from "./helpers/RXInput";
-import RXSprite from "./RXOSprite";
+import RXSprite from "./RXSprite";
 
 const getOptions = (options) => ({
     position: [0, 0],
